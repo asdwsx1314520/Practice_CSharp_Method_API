@@ -462,7 +462,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &292467991
 GameObject:
   m_ObjectHideFlags: 0
@@ -908,6 +908,7 @@ GameObject:
   - component: {fileID: 1148020817}
   - component: {fileID: 1148020816}
   - component: {fileID: 1148020815}
+  - component: {fileID: 1148020818}
   m_Layer: 9
   m_Name: Fox
   m_TagString: Player
@@ -1009,6 +1010,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3dbe0ecf8e54a348a7955cec3d7f0c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpHeight: 3
+  timeToJumpApex: 0.3
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &1148020816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,6 +1046,19 @@ CapsuleCollider2D:
   m_Offset: {x: -0.01, y: -0.045}
   m_Size: {x: 0.17, y: 0.23}
   m_Direction: 0
+--- !u!114 &1148020818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1148020811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a16b671eaa0e7bf4db8b963d2003c769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hero: {fileID: 1148020812}
 --- !u!1 &1571837338
 GameObject:
   m_ObjectHideFlags: 0

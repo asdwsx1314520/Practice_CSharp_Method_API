@@ -26,6 +26,8 @@ public class Controller2D : MonoBehaviour
     new CapsuleCollider2D collider;
     RaycastOrigins raycastOrigins;
 
+    public CollisionInfo collisions;
+
     void Start()
     {
         collider = GetComponent<CapsuleCollider2D>();
@@ -39,13 +41,14 @@ public class Controller2D : MonoBehaviour
     public void Move(Vector2 velocity)
     {
         UpdateRaycastOrigins();
+        collisions.Reset();
 
-        if(velocity.x != 0)
+        if (velocity.x != 0)
         {
             HorizontalCollisions(ref velocity);
         }
 
-        if (velocity.y != 0) 
+        if (velocity.y != 0)
         {
             //ref將變數回傳出來
             VerticalCollisions(ref velocity);
@@ -64,7 +67,7 @@ public class Controller2D : MonoBehaviour
         float rayLength = Mathf.Abs(velocity.x) + skinWidth;
         for (int i = 0; i < horizontalRayCount; i++)
         {
-            //玩家是否在下降
+            //玩家是否在移動
             Vector2 rayOrigin = (directionX == -1) ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight;
             rayOrigin += Vector2.up * (horizontalRaySpacing * i);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
@@ -75,10 +78,15 @@ public class Controller2D : MonoBehaviour
             {
                 velocity.x = (hit.distance - skinWidth) * directionX;
                 rayLength = hit.distance;
+                
+                //當左邊撞擊到牆壁
+                collisions.left = directionX == -1;
+                //當右邊撞擊到牆壁時
+                collisions.right = directionX == 1;
+
             }
         }
     }
-
 
     /// <summary>
     /// 垂直碰撞
@@ -99,8 +107,13 @@ public class Controller2D : MonoBehaviour
 
             if (hit)
             {
-                velocity.y = (hit.distance - skinWidth)* directionY;
+                velocity.y = (hit.distance - skinWidth) * directionY;
                 rayLength = hit.distance;
+
+                //當下方撞擊到牆壁時
+                collisions.below = directionY == -1;
+                //當上方撞擊到牆壁時
+                collisions.above = directionY == 1;
             }
         }
     }
@@ -116,7 +129,7 @@ public class Controller2D : MonoBehaviour
         raycastOrigins.bottomLeft = new Vector2(bounds.min.x, bounds.min.y);
         raycastOrigins.bottomRight = new Vector2(bounds.max.x, bounds.min.y);
         raycastOrigins.topLeft = new Vector2(bounds.min.x, bounds.max.y);
-        raycastOrigins.bottomRight = new Vector2(bounds.max.x, bounds.max.y);
+        raycastOrigins.topRight = new Vector2(bounds.max.x, bounds.max.y);
     }
 
     /// <summary>
@@ -134,10 +147,30 @@ public class Controller2D : MonoBehaviour
         verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
     }
 
-    struct RaycastOrigins 
+    struct RaycastOrigins
     {
         //各個角落
         public Vector2 topLeft, topRight;
         public Vector2 bottomLeft, bottomRight;
+    }
+
+    /// <summary>
+    /// 碰撞訊息
+    /// </summary>
+    public struct CollisionInfo
+    {
+        //上下
+        public bool above, below;
+        //左右
+        public bool left, right;
+
+        /// <summary>
+        /// 碰撞重置
+        /// </summary>
+        public void Reset()
+        {
+            above = below = false;
+            left = right = false;
+        }
     }
 }
