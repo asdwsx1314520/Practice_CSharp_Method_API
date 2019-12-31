@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     float accelerationTimeGrounded = 0.1f;
 
     //移動速度
-    float moveSpeed = 6;
+    float moveSpeed = 10;
 
     //重力
     float gravity;
@@ -23,12 +23,14 @@ public class Player : MonoBehaviour
     float jumpVelocity;
 
     //速度
-    public Vector3 velocity;
+    Vector2 velocity;
 
     //x平滑
     float velocityXSmoothing;
 
     Controller2D controller;
+
+    public Vector2 animType;
 
     void Start()
     {
@@ -59,6 +61,7 @@ public class Player : MonoBehaviour
         //Mathf.SmoothDamp(原點,目標,平滑數值,所需的時間)
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)? accelerationTimeGrounded: accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+
+        animType = controller.Move(velocity * Time.deltaTime);
     }
 }

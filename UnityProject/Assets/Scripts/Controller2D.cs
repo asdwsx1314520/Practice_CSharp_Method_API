@@ -5,6 +5,11 @@ using UnityEngine;
 [RequireComponent(typeof(CapsuleCollider2D))]
 public class Controller2D : MonoBehaviour
 {
+    [Header("角色身體")]
+    public Transform body;
+
+    [Header("角度")]
+    float angle;
     /// <summary>
     /// 圖層矇板(判斷射線撞到的物體)
     /// </summary>
@@ -38,7 +43,7 @@ public class Controller2D : MonoBehaviour
     /// 角色移動
     /// </summary>
     /// <param name="velocity">移動方向</param>
-    public void Move(Vector2 velocity)
+    public Vector2 Move(Vector2 velocity)
     {
         UpdateRaycastOrigins();
         collisions.Reset();
@@ -55,6 +60,17 @@ public class Controller2D : MonoBehaviour
         }
 
         transform.Translate(velocity);
+
+        if (velocity.x > 0) 
+        {
+            body.rotation = Quaternion.Euler(new Vector2(0, 0));
+        }
+        else if(velocity.x < 0)
+        {
+            body.rotation = Quaternion.Euler(new Vector2(0, 180));
+        }
+
+        return velocity;
     }
 
     /// <summary>
