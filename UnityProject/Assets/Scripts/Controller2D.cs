@@ -61,6 +61,8 @@ public class Controller2D : MonoBehaviour
 
         transform.Translate(velocity);
 
+        if (collisions.left || collisions.right) return velocity;
+
         if (velocity.x > 0) 
         {
             body.rotation = Quaternion.Euler(new Vector2(0, 0));
